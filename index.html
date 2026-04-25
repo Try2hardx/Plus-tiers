@@ -28,7 +28,6 @@
   --green:#34d399;
   --radius:10px;
   --radius-sm:7px;
-  /* Purple rank shades */
   --rank1:#c4b5fd;
   --rank2:#a78bfa;
   --rank3:#8b5cf6;
@@ -346,7 +345,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   transform:scale(0.95);
 }
 
-/* Purple rank shades — no gold/silver/bronze/red */
 .card-rank{
   font-family:'Orbitron',sans-serif;
   font-size:1.05rem;font-weight:900;
@@ -374,16 +372,21 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   padding:2px 7px;border-radius:4px;
 }
 
-/* Overall card tier badges — purple themed */
 .card-tiers{display:flex;gap:6px;flex-shrink:0;margin-left:auto;align-items:center;flex-wrap:wrap;max-width:220px;justify-content:flex-end}
 .tier-badge-sm{
   font-size:.65rem;font-weight:900;letter-spacing:.5px;
   padding:3px 8px;border-radius:5px;
   display:inline-flex;align-items:center;gap:4px;
-  /* purple forced — color/border set inline but background always purple-tinted */
   background:rgba(139,92,246,.1)!important;
   border:1px solid rgba(139,92,246,.3)!important;
   color:var(--purple2)!important;
+}
+.tier-badge-sm.retired{
+  opacity:.45;
+  filter:grayscale(.6);
+  background:rgba(100,100,120,.1)!important;
+  border:1px solid rgba(100,100,120,.3)!important;
+  color:var(--text3)!important;
 }
 .tier-badge-sm img{
   width:12px;height:12px;
@@ -429,24 +432,22 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
 }
 .tier-player-fb{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem;color:#fff}
 .tier-player-name{font-weight:700;font-size:.85rem;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase;font-style:italic}
+.tier-sub-badge{font-size:.6rem;font-weight:900;letter-spacing:.5px;flex-shrink:0}
 .tier-col-empty{padding:12px;color:var(--text3);font-size:.75rem;text-align:center;border-top:1px solid var(--border);font-style:italic}
+.tier-ht-lt-divider{height:1px;background:var(--border);margin:0 12px}
 
 /* ══════════════════ TITLE ANIMATIONS ══════════════════ */
 @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
 @keyframes flowText{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes nameShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
 
-/* ALL title colors — full purple palette */
 .title-grandmaster{background:linear-gradient(90deg,#c4b5fd,#ede9fe,#a78bfa,#ede9fe,#c4b5fd);background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .title-master{color:#c4b5fd}
 .title-ace{color:#a78bfa}
 .title-specialist{color:var(--purple2)}
 .title-cadet{color:#818cf8}
-/* FIX 1: Combat Novice was green — now purple */
 .title-novice{color:#9d7df0}
 .title-rookie{color:var(--text2)}
-
-.animate-flow{display:inline-block}
 
 /* ══════════════════ PLAYER MODAL ══════════════════ */
 .modal-overlay{
@@ -487,7 +488,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
 }
 .modal-close:hover{background:var(--purple);border-color:var(--purple);color:#fff}
 
-/* Avatar area */
 .modal-avatar-wrap{
   display:flex;justify-content:center;padding:28px 0 16px;
   position:relative;
@@ -508,7 +508,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   display:block;
 }
 
-/* Text section */
 .modal-text-section{
   padding:0 24px 20px;
   display:flex;flex-direction:column;align-items:center;
@@ -539,7 +538,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   margin-bottom:12px;
 }
 
-/* NameMC button */
 .modal-namemc-btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 18px;border-radius:8px;
@@ -559,7 +557,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   flex-shrink:0;
 }
 
-/* Position section */
 .modal-position-section{
   margin:0 16px 16px;
   background:var(--bg3);border:1px solid var(--border);
@@ -598,7 +595,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   margin-left:auto;white-space:nowrap;
 }
 
-/* Tiers section */
 .modal-tiers-section{
   margin:0 16px 16px;
 }
@@ -614,7 +610,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   display:flex;flex-direction:column;align-items:center;gap:4px;
   min-width:38px;
 }
-/* FIX 3: Modal tier icon — purple instead of red */
 .modal-tier-icon-wrap{
   width:38px;height:38px;border-radius:50%;
   background:var(--bg4);border:2px solid var(--border);
@@ -628,6 +623,10 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   border-color:rgba(139,92,246,.5)!important;
   background:rgba(139,92,246,.12)!important;
 }
+.modal-tier-icon-wrap.has-tier.is-retired{
+  border-color:rgba(120,120,140,.4)!important;
+  background:rgba(80,80,100,.12)!important;
+}
 .modal-tier-icon-wrap img{
   width:20px;height:20px;image-rendering:pixelated;object-fit:contain;
 }
@@ -635,16 +634,22 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   font-size:.6rem;font-weight:900;letter-spacing:.5px;
   text-transform:uppercase;
 }
-/* FIX 3: force purple on tier value text */
-.modal-tier-chip:not(.modal-tier-empty) .modal-tier-val{
+.modal-tier-chip:not(.modal-tier-empty):not(.modal-tier-retired) .modal-tier-val{
   color:var(--purple2)!important;
+}
+.modal-tier-chip.modal-tier-retired .modal-tier-val{
+  color:var(--text3)!important;
 }
 .modal-tier-empty{
   opacity:.25;
 }
+.modal-tier-retired{
+  opacity:.5;
+}
 .modal-tier-dash{
   font-size:.7rem;color:var(--text3);font-weight:900;
 }
+.retired-icon{font-size:.7rem;line-height:1}
 
 /* ══════════════════ INFO MODAL ══════════════════ */
 .info-modal-box{
@@ -689,7 +694,6 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
 .rank-name{font-weight:900;font-size:.95rem;text-transform:uppercase;letter-spacing:1px}
 .rank-pts{font-size:.62rem;font-weight:700;color:var(--text2)}
 
-/* ══════════════════ POINTS INFO PANEL ══════════════════ */
 .pts-info-desc{
   font-size:.68rem;color:var(--text2);
   font-family:'Orbitron',sans-serif;letter-spacing:.03em;line-height:1.6;
@@ -789,7 +793,7 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
 <header class="site-header">
   <div class="header-inner">
     <div class="logo">
-      <span class="logo-text"><span class="logo-mc">Plus</span><span class="logo-tiers">TIERS</span></span>
+      <span class="logo-text"><span class="logo-mc">PLUS</span><span class="logo-tiers">TIERS</span></span>
       <span class="logo-sub">Official Rankings</span>
     </div>
     <nav class="top-nav">
@@ -890,17 +894,25 @@ const TIER_GROUPS = [
 let players=[];
 let currentMode="overall";
 
+/* ── Retired helper: value starts with R then HT or LT ── */
+function isRetired(name){
+  return /^r(ht|lt)/i.test(String(name||"").trim());
+}
+
 function tierCfg(name){
   const n=(name||"Untested").trim();
   return CONFIG.TIERS.find(t=>t.name.toLowerCase()===n.toLowerCase())||{name:n,color:"#3a4060",points:0};
 }
+
 function tierPoints(name){
   if(!name||name.trim()===""||name.trim().toLowerCase()==="untested") return 0;
+  if(isRetired(name)) return 0;
   const key=name.trim().toLowerCase();
   if(TIER_POINTS[key]!==undefined) return TIER_POINTS[key].ht;
   const cfg=tierCfg(name);
   return +(cfg.points||cfg.ltPoints||0);
 }
+
 function playerPoints(p){
   return CONFIG.GAME_MODES.reduce((sum,m)=>{
     const val=(p[m.key+" New Tier"]||"").trim();
@@ -938,7 +950,7 @@ function splitLine(line){
 }
 
 async function init(){
-  document.title=CONFIG.SITE_NAME||"Plus Tiers";
+  document.title="Plus Tiers";
   const el=document.getElementById("discord-link");
   if(el) el.href="https://discord.gg/nnhU3qCtbp";
   buildModeTabs();
@@ -962,23 +974,19 @@ async function init(){
   showOverall();
 }
 
-// Keys that go into the "Other Gamemodes" dropdown
 const OTHER_MODE_KEYS = ["Diamond Spear", "Ultra Diamond SMP", "Jumpfight"];
 
 function buildModeTabs(){
   const bar=document.getElementById("mode-bar-inner");
   const right=bar.querySelector(".tab-bar-right");
 
-  // Overall tab
   bar.insertBefore(makeTab("overall","🏆","Overall",null,()=>{selectMode("overall");showOverall();}),right);
 
-  // Main game mode tabs (everything NOT in the dropdown list)
   const mainModes=CONFIG.GAME_MODES.filter(m=>!OTHER_MODE_KEYS.includes(m.key));
   mainModes.forEach(m=>{
     bar.insertBefore(makeTab(m.key,null,m.label,m.icon,()=>{selectMode(m.key);showTierMode(m.key);}),right);
   });
 
-  // Dropdown modes
   const specialModes=CONFIG.GAME_MODES.filter(m=>OTHER_MODE_KEYS.includes(m.key));
   if(specialModes.length>0){
     const wrap=document.createElement("div");
@@ -1015,10 +1023,8 @@ function buildModeTabs(){
         closeOtherDropdown();
         selectMode(m.key);
         showTierMode(m.key);
-        // Mark active item
         dropdown.querySelectorAll(".other-mode-item").forEach(i=>i.classList.remove("active"));
         item.classList.add("active");
-        // Mark btn as active
         btn.classList.add("active");
       });
       dropdown.appendChild(item);
@@ -1029,7 +1035,6 @@ function buildModeTabs(){
       const isOpen=dropdown.classList.contains("open");
       if(isOpen){ closeOtherDropdown(); }
       else {
-        // Position relative to mode-bar-wrap
         const wrapRect=document.querySelector(".mode-bar-wrap").getBoundingClientRect();
         const btnRect=btn.getBoundingClientRect();
         dropdown.style.position="absolute";
@@ -1042,7 +1047,6 @@ function buildModeTabs(){
     });
 
     wrap.appendChild(btn);
-    // Append dropdown to mode-bar-wrap (not inner) so overflow:auto doesn't clip it
     bar.insertBefore(wrap,right);
     const modeBarWrap=document.querySelector(".mode-bar-wrap");
     if(modeBarWrap) modeBarWrap.appendChild(dropdown);
@@ -1057,7 +1061,6 @@ function closeOtherDropdown(){
   if(btn) btn.classList.remove("open");
 }
 
-// Close dropdown when clicking outside
 document.addEventListener("click",(e)=>{
   const wrap=document.querySelector(".other-modes-wrap");
   const dd=document.getElementById("other-modes-dropdown");
@@ -1078,7 +1081,6 @@ function makeTab(key,emoji,label,icon,onClick){
 function selectMode(key){
   currentMode=key;
   document.querySelectorAll(".mode-tab").forEach(t=>t.classList.toggle("active",t.dataset.mode===key));
-  // If switching to a main tab, clear the dropdown button's active state
   const isOther=OTHER_MODE_KEYS.includes(key);
   const btn=document.getElementById("other-modes-btn");
   const dd=document.getElementById("other-modes-dropdown");
@@ -1098,6 +1100,7 @@ function purpleName(text,rank){
   return `<span style="color:#fff">${esc(text)}</span>`;
 }
 
+/* ══════════════ OVERALL VIEW ══════════════ */
 function showOverall(){
   selectMode("overall");
   const list=[...players].map(p=>({...p,_pts:playerPoints(p)})).sort((a,b)=>b._pts-a._pts);
@@ -1106,8 +1109,8 @@ function showOverall(){
   let html="";
   list.forEach((p,i)=>{
     const rank=i+1;
-    const ign=(p.IGN||p.Player||"?").trim();
-    const name=(p.Player||ign).trim();
+    // IGN column is the sole source for display name
+    const ign=(p.IGN||"?").trim();
     const reg=(p.Region||"").trim();
     const disc=(p.DiscordID||"").trim();
     const pts=p._pts;
@@ -1118,20 +1121,18 @@ function showOverall(){
     else if(rank===2) rankCls="rank-2";
     else if(rank===3) rankCls="rank-3";
 
-    let nameSpan=purpleName(name,rank);
-
+    const nameSpan=purpleName(ign,rank);
     const skin46=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/46`;
     const skin72=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/72`;
 
-    /* FIX 2: Overall card tier badges — purple + show mode icon */
     const badges=CONFIG.GAME_MODES.map(m=>{
       const t=(p[m.key+" New Tier"]||"").trim();
       if(!t||t.toLowerCase()==="untested") return "";
-      // Icon for this game mode
+      const retired=isRetired(t);
       const iconH=m.icon
         ?`<img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'">`
         :"";
-      return `<span class="tier-badge-sm">${iconH}${esc(t)}</span>`;
+      return `<span class="tier-badge-sm${retired?' retired':''}">${iconH}${retired?'🔒 ':''}${esc(t)}</span>`;
     }).join("");
 
     html+=`<div class="player-card" onclick="openModal('${esc(disc)}')">
@@ -1173,6 +1174,7 @@ function showTierMode(modeKey){
   players.forEach(p=>{
     const raw=(p[colKey]||"").trim();
     if(!raw||raw.toLowerCase()==="untested") return;
+    if(isRetired(raw)) return;
     const num=tierNumber(raw);
     if(!groupMap[num]) groupMap[num]={num,htMembers:[],ltMembers:[],htCfg:null,ltCfg:null};
     const tc=tierCfg(raw);
@@ -1186,8 +1188,9 @@ function showTierMode(modeKey){
   });
 
   Object.values(groupMap).forEach(g=>{
-    g.htMembers.sort((a,b)=>(a.Player||"").localeCompare(b.Player||""));
-    g.ltMembers.sort((a,b)=>(a.Player||"").localeCompare(b.Player||""));
+    // Sort alphabetically by IGN
+    g.htMembers.sort((a,b)=>(a.IGN||"").localeCompare(b.IGN||""));
+    g.ltMembers.sort((a,b)=>(a.IGN||"").localeCompare(b.IGN||""));
   });
 
   const sortedGroups=Object.values(groupMap).sort((a,b)=>a.num-b.num);
@@ -1225,14 +1228,14 @@ function showTierMode(modeKey){
     } else {
       const renderMembers=(members,label,badgeColor)=>{
         members.forEach(p=>{
-          const ign=(p.IGN||p.Player||"?").trim();
-          const name=(p.Player||ign).trim();
+          // IGN column is the sole source for display name
+          const ign=(p.IGN||"?").trim();
           const disc=(p.DiscordID||"").trim();
           const skin=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/28`;
           html+=`<div class="tier-player-row" data-disc="${esc(disc)}">
             <img src="${skin}" alt="${esc(ign)}" width="26" height="26"
-              onerror="this.outerHTML='<div class=tier-player-fb>${name[0]?.toUpperCase()||"?"}</div>'">
-            <span class="tier-player-name">${esc(name)}</span>
+              onerror="this.outerHTML='<div class=tier-player-fb>${ign[0]?.toUpperCase()||"?"}</div>'">
+            <span class="tier-player-name">${esc(ign)}</span>
             <span class="tier-sub-badge" style="color:${badgeColor}">${label}</span>
           </div>`;
         });
@@ -1257,8 +1260,8 @@ function showTierMode(modeKey){
 function openModal(discordId){
   const p=players.find(x=>(x.DiscordID||"").trim()===discordId);
   if(!p) return;
-  const ign=(p.IGN||p.Player||"?").trim();
-  const name=(p.Player||ign).trim();
+  // IGN column is the sole source for display name
+  const ign=(p.IGN||"?").trim();
   const reg=(p.Region||"").trim();
   const pts=playerPoints(p);
   const ti=getTitle(pts);
@@ -1270,17 +1273,24 @@ function openModal(discordId){
   else if(rank===2) rankCls="rank-2";
   else if(rank===3) rankCls="rank-3";
 
-  /* FIX 3: Tier chips — purple colors + show game mode icon clearly */
   const tierChips=CONFIG.GAME_MODES.map(m=>{
     const t=(p[m.key+" New Tier"]||"").trim();
+    const retired=isRetired(t);
     const isTested=t&&t.toLowerCase()!=="untested";
 
-    // Icon for this game mode
     const iconHtml=m.icon
       ?`<img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'">`
       :`<span style="font-size:.55rem;font-weight:900;color:var(--purple2);letter-spacing:.5px;text-transform:uppercase">${m.label[0]}</span>`;
 
     if(isTested){
+      if(retired){
+        return `<div class="modal-tier-chip modal-tier-retired" title="Retired">
+          <div class="modal-tier-icon-wrap has-tier is-retired">
+            ${iconHtml}
+          </div>
+          <span class="modal-tier-val">🔒${esc(t)}</span>
+        </div>`;
+      }
       return `<div class="modal-tier-chip">
         <div class="modal-tier-icon-wrap has-tier">
           ${iconHtml}
@@ -1302,14 +1312,14 @@ function openModal(discordId){
       <div class="modal-avatar-ring">
         <img
           src="https://mc-heads.net/avatar/${encodeURIComponent(ign)}/80"
-          alt="${esc(name)}"
+          alt="${esc(ign)}"
           onerror="this.src='https://crafatar.com/avatars/${encodeURIComponent(ign)}?size=80&overlay'"
         >
       </div>
     </div>
 
     <div class="modal-text-section">
-      <div class="modal-ign">${esc(name)}</div>
+      <div class="modal-ign">${esc(ign)}</div>
       <div class="modal-title-pill">
         <div class="modal-title-pill-dot"></div>
         <span class="modal-title-text ${ti.cls}">${ti.label}</span>
@@ -1373,7 +1383,7 @@ function buildInfoPanels(){
 
   const descHtml=`
     <div class="pts-info-desc">
-      How <span class="hl">ranking points</span> are calculated — each tier you hold across all game modes contributes points to your total score.
+      How <span class="hl">ranking points</span> are calculated — each tier you hold across all game modes contributes points to your total score. <span class="hl">Retired (R) tiers</span> give 0 points and are hidden from gamemode tabs.
     </div>`;
 
   const tiersHtml=TIER_GROUPS.map(g=>{
@@ -1418,18 +1428,18 @@ function setupSearch(){
     const q=inp.value.trim().toLowerCase();
     res.innerHTML="";
     if(!q){res.classList.add("hidden");return;}
+    // Search by IGN only
     const hits=players.filter(p=>
-      (p.Player||"").toLowerCase().includes(q)||(p.IGN||"").toLowerCase().includes(q)
+      (p.IGN||"").toLowerCase().includes(q)
     ).slice(0,8);
     if(!hits.length){res.classList.add("hidden");return;}
     hits.forEach(p=>{
-      const ign=(p.IGN||p.Player||"?").trim();
-      const name=(p.Player||ign).trim();
+      const ign=(p.IGN||"?").trim();
       const reg=(p.Region||"").trim();
       const div=document.createElement("div");div.className="sr-item";
       div.innerHTML=`<img src="https://mc-heads.net/avatar/${encodeURIComponent(ign)}/32" alt="${esc(ign)}"
-          onerror="this.outerHTML='<div class=sr-avatar>${name[0]?.toUpperCase()||"?"}</div>'">
-        <div><div class="sr-name">${esc(name)}</div><div class="sr-sub">${esc(ign)}</div></div>
+          onerror="this.outerHTML='<div class=sr-avatar>${ign[0]?.toUpperCase()||"?"}</div>'">
+        <div><div class="sr-name">${esc(ign)}</div><div class="sr-sub">${esc(ign)}</div></div>
         <span class="sr-region">${esc(reg)}</span>`;
       div.addEventListener("click",()=>{res.classList.add("hidden");inp.value="";openModal((p.DiscordID||"").trim());});
       res.appendChild(div);
