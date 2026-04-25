@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>PvP Tiers</title>
+<title>Plus Tiers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
@@ -789,7 +789,7 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
 <header class="site-header">
   <div class="header-inner">
     <div class="logo">
-      <span class="logo-text"><span class="logo-mc">PVP</span><span class="logo-tiers">TIERS</span></span>
+      <span class="logo-text"><span class="logo-mc">Plus</span><span class="logo-tiers">TIERS</span></span>
       <span class="logo-sub">Official Rankings</span>
     </div>
     <nav class="top-nav">
@@ -938,7 +938,7 @@ function splitLine(line){
 }
 
 async function init(){
-  document.title=CONFIG.SITE_NAME||"PvP Tiers";
+  document.title=CONFIG.SITE_NAME||"Plus Tiers";
   const el=document.getElementById("discord-link");
   if(el) el.href="https://discord.gg/nnhU3qCtbp";
   buildModeTabs();
