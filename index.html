@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PvP Tiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080f;
+  --bg2:#0d0f1a;
+  --bg3:#121626;
+  --bg4:#181d32;
+  --bg5:#1f263f;
+  --border:rgba(120,80,255,.1);
+  --border2:rgba(120,80,255,.22);
+  --text:#d4d8f0;
+  --text2:#7a80a8;
+  --text3:#3a4060;
+  --purple:#8b5cf6;
+  --purple2:#a78bfa;
+  --purple3:#6d28d9;
+  --purple-glow:rgba(139,92,246,.3);
+  --purple-dim:rgba(139,92,246,.12);
+  --green:#34d399;
+  --radius:10px;
+  --radius-sm:7px;
+  /* Purple rank shades */
+  --rank1:#c4b5fd;
+  --rank2:#a78bfa;
+  --rank3:#8b5cf6;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+body::before{
+  content:'';
+  position:fixed;top:0;left:50%;
+  transform:translateX(-50%);
+  width:1000px;height:600px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(139,92,246,.09) 0%, transparent 65%);
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px);
+  pointer-events:none;z-index:0;
+}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--purple)}
+a{text-decoration:none;color:inherit}
+button{border:none;background:none;cursor:pointer;font-family:inherit}
+
+/* ══════════════════ HEADER ══════════════════ */
+.site-header{
+  position:sticky;top:0;z-index:200;
+  height:68px;
+  background:rgba(7,8,15,.97);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  display:flex;align-items:center;gap:0;
+  height:100%;max-width:1440px;margin:0 auto;padding:0 32px;
+}
+.logo{display:flex;flex-direction:column;margin-right:32px;flex-shrink:0}
+.logo-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.55rem;font-weight:900;letter-spacing:.04em;line-height:1;
+  text-transform:uppercase;
+}
+.logo-mc{color:var(--purple)}
+.logo-tiers{color:var(--purple2)}
+.logo-sub{font-size:.55rem;font-weight:700;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-top:2px;font-family:'Orbitron',sans-serif}
+
+.top-nav{display:flex;align-items:center;gap:4px;flex:1}
+.nav-link{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:var(--radius-sm);
+  font-weight:700;font-size:.78rem;color:var(--text2);
+  letter-spacing:.05em;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;
+  transition:color .15s,background .15s;
+}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-link.active{color:var(--purple2)}
+.nav-discord{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:var(--radius-sm);
+  font-weight:700;font-size:.78rem;color:var(--text2);
+  letter-spacing:.05em;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;
+  transition:color .15s,background .15s;cursor:pointer;
+}
+.nav-discord:hover{color:var(--text);background:rgba(255,255,255,.04)}
+
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.search-wrap{position:relative}
+.search-inner{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:8px 14px;
+  width:230px;transition:border-color .2s,box-shadow .2s;
+}
+.search-inner:focus-within{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(139,92,246,.15);
+}
+.search-inner svg{opacity:.35;flex-shrink:0}
+.search-box{background:none;border:none;outline:none;color:var(--text);font-size:.82rem;font-family:'Orbitron',sans-serif;letter-spacing:.04em;width:100%}
+.search-box::placeholder{color:var(--text3)}
+.search-results{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--radius);overflow:hidden;z-index:300;
+  box-shadow:0 20px 60px rgba(0,0,0,.8);
+}
+.sr-item{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background .12s}
+.sr-item:hover{background:var(--bg4)}
+.sr-item img,.sr-avatar{width:32px;height:32px;border-radius:5px;object-fit:contain;image-rendering:pixelated;background:var(--bg5);flex-shrink:0;border:1px solid var(--border)}
+.sr-avatar{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;color:#fff}
+.sr-name{font-weight:900;font-size:.88rem;text-transform:uppercase;letter-spacing:.03em}
+.sr-sub{font-size:.7rem;color:var(--text2);font-family:monospace;margin-top:1px}
+.sr-region{margin-left:auto;font-size:.68rem;color:var(--text3);font-weight:700;letter-spacing:1px}
+.hidden{display:none!important}
+
+/* ══════════════════ MODE TABS ══════════════════ */
+.mode-bar-wrap{
+  position:sticky;top:68px;z-index:190;
+  background:rgba(7,8,15,.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  overflow:visible;
+}
+.mode-bar-inner{
+  display:flex;align-items:stretch;
+  max-width:1440px;margin:0 auto;padding:0 32px;
+  overflow-x:auto;overflow-y:visible;scrollbar-width:none;
+  gap:2px;
+}
+.mode-bar-inner::-webkit-scrollbar{display:none}
+
+.mode-tab{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 18px;
+  color:var(--text3);font-weight:700;font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Orbitron',sans-serif;
+  border-bottom:3px solid transparent;
+  transition:color .15s,border-color .15s,background .15s;
+  flex-shrink:0;white-space:nowrap;
+}
+.mode-tab:hover{color:var(--text2);background:rgba(255,255,255,.02)}
+.mode-tab.active{color:var(--purple2);border-bottom-color:var(--purple)}
+.mode-tab img{width:16px;height:16px;object-fit:contain;image-rendering:pixelated;opacity:.4;transition:opacity .15s;flex-shrink:0}
+.mode-tab.active img,.mode-tab:hover img{opacity:1}
+.mode-tab .tab-emoji{font-size:1rem;opacity:.4;transition:opacity .15s}
+.mode-tab.active .tab-emoji,.mode-tab:hover .tab-emoji{opacity:1}
+
+.tab-divider{
+  width:1px;background:var(--border);margin:8px 4px;flex-shrink:0;align-self:stretch;
+}
+.tab-section-label{
+  display:flex;align-items:center;
+  padding:0 10px;
+  font-size:.55rem;font-weight:700;letter-spacing:.2em;color:var(--text3);
+  text-transform:uppercase;font-family:'Orbitron',sans-serif;
+  flex-shrink:0;white-space:nowrap;
+}
+
+.tab-bar-right{display:flex;align-items:center;gap:8px;margin-left:auto;padding-left:16px;flex-shrink:0}
+
+/* ══════════════════ OTHER MODES DROPDOWN ══════════════════ */
+.other-modes-wrap{
+  position:relative;flex-shrink:0;
+  display:flex;align-items:stretch;
+}
+.other-modes-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 16px;
+  color:var(--text3);font-weight:700;font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Orbitron',sans-serif;
+  border-bottom:3px solid transparent;
+  transition:color .15s,border-color .15s,background .15s;
+  white-space:nowrap;user-select:none;
+}
+.other-modes-btn:hover{color:var(--text2);background:rgba(255,255,255,.02)}
+.other-modes-btn.active{color:var(--purple2);border-bottom-color:var(--purple)}
+.other-modes-btn.open{color:var(--purple2);background:rgba(139,92,246,.08);border-bottom-color:var(--purple)}
+.other-modes-chevron{
+  transition:transform .2s ease;
+  opacity:.5;
+}
+.other-modes-btn.open .other-modes-chevron{transform:rotate(180deg);opacity:1}
+
+.other-modes-dropdown{
+  position:absolute;
+  min-width:220px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--purple);
+  border-radius:0 0 var(--radius) var(--radius);
+  box-shadow:0 16px 48px rgba(0,0,0,.85),0 0 24px rgba(139,92,246,.12);
+  z-index:9999;
+  overflow:hidden;
+  opacity:0;pointer-events:none;
+  transform:translateY(-4px);
+  transition:opacity .15s ease,transform .15s ease;
+}
+.other-modes-dropdown.open{
+  opacity:1;pointer-events:all;
+  transform:translateY(0);
+}
+.other-modes-dropdown-header{
+  padding:8px 14px 6px;
+  font-size:.55rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--text3);
+  font-family:'Orbitron',sans-serif;
+  border-bottom:1px solid var(--border);
+}
+.other-mode-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;cursor:pointer;
+  transition:background .12s,padding-left .15s;
+  border-bottom:1px solid var(--border);
+}
+.other-mode-item:last-child{border-bottom:none}
+.other-mode-item:hover{background:var(--purple-dim);padding-left:20px}
+.other-mode-item.active{
+  background:rgba(139,92,246,.12);
+  border-left:2px solid var(--purple);
+  padding-left:12px;
+}
+.other-mode-item img{
+  width:18px;height:18px;object-fit:contain;
+  image-rendering:pixelated;opacity:.7;flex-shrink:0;
+}
+.other-mode-item-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:.72rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text2);
+}
+.other-mode-item:hover .other-mode-item-label,
+.other-mode-item.active .other-mode-item-label{color:var(--purple2)}
+.info-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:var(--radius-sm);
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);font-weight:700;font-size:.68rem;
+  cursor:pointer;transition:all .13s;white-space:nowrap;
+  letter-spacing:.06em;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;
+}
+.info-btn:hover{border-color:var(--purple);color:var(--purple2);background:var(--bg4);box-shadow:0 0 14px var(--purple-dim)}
+
+/* ══════════════════ SUB BAR ══════════════════ */
+.sub-bar{background:var(--bg);border-bottom:1px solid var(--border)}
+.sub-bar-inner{display:flex;align-items:center;max-width:1440px;margin:0 auto;padding:6px 32px}
+.player-count-badge{
+  margin-left:auto;font-size:.7rem;font-weight:700;color:var(--text3);
+  font-family:'Orbitron',sans-serif;letter-spacing:.08em;
+}
+
+/* ══════════════════ MAIN ══════════════════ */
+.main{max-width:1440px;margin:0 auto;padding:28px 32px 80px;position:relative;z-index:1}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:300px;color:var(--text2);font-weight:700}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--purple2);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══════════════════ OVERALL PLAYER CARDS ══════════════════ */
+.player-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 20px;
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:8px;cursor:pointer;
+  transition:all .25s cubic-bezier(.175,.885,.32,1.275);
+  position:relative;overflow:visible;
+}
+.player-card::before{
+  content:'';position:absolute;left:0;top:4px;bottom:4px;
+  width:3px;border-radius:3px;background:var(--border);
+  transition:background .2s;
+}
+.player-card:hover::before{background:var(--purple)}
+.player-card:hover{
+  border-color:var(--border2);background:var(--bg3);
+  transform:translateX(5px);
+  box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 20px var(--purple-dim);
+}
+
+.head-float-wrap{
+  position:relative;flex-shrink:0;
+  width:46px;height:46px;
+}
+.player-head-sm{
+  width:46px;height:46px;border-radius:8px;
+  object-fit:contain;image-rendering:pixelated;
+  border:1px solid var(--border);
+  background:var(--bg4);
+  display:block;
+  transition:opacity .2s,transform .2s;
+}
+.head-float{
+  position:absolute;
+  bottom:0;left:50%;
+  transform:translateX(-50%) scale(1) translateY(0) rotate(0deg);
+  transform-origin:bottom center;
+  width:72px;height:72px;
+  border-radius:10px;
+  object-fit:contain;image-rendering:pixelated;
+  border:2px solid var(--purple);
+  background:var(--bg4);
+  opacity:0;pointer-events:none;
+  z-index:30;
+  transition:
+    transform .4s cubic-bezier(.34,1.7,.64,1),
+    opacity .18s ease,
+    box-shadow .3s ease;
+  box-shadow:none;
+}
+.player-card:hover .head-float{
+  opacity:1;
+  transform:translateX(-50%) scale(1.1) translateY(-18px) rotate(-4deg);
+  box-shadow:0 8px 24px rgba(0,0,0,.8),0 0 18px var(--purple-glow);
+}
+.player-card:hover .player-head-sm{
+  opacity:0.4;
+  transform:scale(0.95);
+}
+
+/* Purple rank shades — no gold/silver/bronze/red */
+.card-rank{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.05rem;font-weight:900;
+  color:var(--text3);width:30px;text-align:center;flex-shrink:0;
+}
+.rank-1{color:var(--rank1)!important}
+.rank-2{color:var(--rank2)!important}
+.rank-3{color:var(--rank3)!important}
+
+.card-info{flex:1;min-width:0}
+.card-ign{
+  font-weight:900;font-style:italic;
+  font-size:1.15rem;text-transform:uppercase;
+  letter-spacing:.5px;color:#fff;line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:block;
+}
+.card-sub{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.card-title{font-size:.72rem;font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.card-pts{font-size:.72rem;font-weight:700;color:var(--text2);letter-spacing:.5px}
+.region-badge{
+  font-size:.6rem;font-weight:900;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text2);
+  background:var(--bg);border:1px solid var(--border);
+  padding:2px 7px;border-radius:4px;
+}
+
+/* Overall card tier badges — purple themed */
+.card-tiers{display:flex;gap:6px;flex-shrink:0;margin-left:auto;align-items:center;flex-wrap:wrap;max-width:220px;justify-content:flex-end}
+.tier-badge-sm{
+  font-size:.65rem;font-weight:900;letter-spacing:.5px;
+  padding:3px 8px;border-radius:5px;
+  display:inline-flex;align-items:center;gap:4px;
+  /* purple forced — color/border set inline but background always purple-tinted */
+  background:rgba(139,92,246,.1)!important;
+  border:1px solid rgba(139,92,246,.3)!important;
+  color:var(--purple2)!important;
+}
+.tier-badge-sm img{
+  width:12px;height:12px;
+  image-rendering:pixelated;
+  object-fit:contain;
+  opacity:.9;
+  flex-shrink:0;
+}
+
+/* ══════════════════ TIER COLUMNS VIEW ══════════════════ */
+.tier-columns{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
+  gap:12px;align-items:start;
+}
+.tier-col{
+  background:var(--bg2);border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--border);
+  animation:fadeUp .3s ease both;
+  transition:border-color .2s;
+}
+.tier-col:hover{border-color:var(--border2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tier-col-header{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 14px;position:relative;overflow:hidden;
+}
+.tier-col-header::before{content:'';position:absolute;inset:0;background:currentColor;opacity:.08}
+.tier-col-name{
+  font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:900;
+  letter-spacing:.04em;position:relative;z-index:1;text-transform:uppercase;
+}
+.tier-col-trophy{font-size:.9rem;position:relative;z-index:1;line-height:1}
+.tier-player-row{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 12px;border-top:1px solid var(--border);
+  cursor:pointer;transition:background .12s,padding-left .12s;
+}
+.tier-player-row:hover{background:var(--purple-dim);padding-left:16px}
+.tier-player-row img,.tier-player-fb{
+  width:26px;height:26px;border-radius:4px;
+  object-fit:contain;image-rendering:pixelated;background:var(--bg5);flex-shrink:0;
+}
+.tier-player-fb{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem;color:#fff}
+.tier-player-name{font-weight:700;font-size:.85rem;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase;font-style:italic}
+.tier-col-empty{padding:12px;color:var(--text3);font-size:.75rem;text-align:center;border-top:1px solid var(--border);font-style:italic}
+
+/* ══════════════════ TITLE ANIMATIONS ══════════════════ */
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes flowText{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes nameShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+/* ALL title colors — full purple palette */
+.title-grandmaster{background:linear-gradient(90deg,#c4b5fd,#ede9fe,#a78bfa,#ede9fe,#c4b5fd);background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.title-master{color:#c4b5fd}
+.title-ace{color:#a78bfa}
+.title-specialist{color:var(--purple2)}
+.title-cadet{color:#818cf8}
+/* FIX 1: Combat Novice was green — now purple */
+.title-novice{color:#9d7df0}
+.title-rookie{color:var(--text2)}
+
+.animate-flow{display:inline-block}
+
+/* ══════════════════ PLAYER MODAL ══════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.88);
+  backdrop-filter:blur(16px);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fadeIn .18s ease;
+  overflow-y:auto;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:20px;width:100%;max-width:340px;
+  position:relative;overflow:hidden;
+  animation:slideUp .28s cubic-bezier(.175,.885,.32,1.275);
+  box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 40px var(--purple-glow);
+}
+.modal-box::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple2),var(--purple),var(--purple2),transparent);
+  background-size:200% 100%;animation:shimmer 3s linear infinite;
+  border-radius:20px 20px 0 0;pointer-events:none;z-index:2;
+}
+@keyframes slideUp{
+  0%{opacity:0;transform:scale(.85) translateY(20px)}
+  60%{opacity:1;transform:scale(1.03) translateY(-4px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+
+.modal-close{
+  position:absolute;top:12px;right:12px;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--bg4);border:1px solid var(--border);
+  color:var(--text2);font-size:.85rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .13s;cursor:pointer;z-index:10;
+}
+.modal-close:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* Avatar area */
+.modal-avatar-wrap{
+  display:flex;justify-content:center;padding:28px 0 16px;
+  position:relative;
+}
+.modal-avatar-ring{
+  width:90px;height:90px;border-radius:50%;
+  border:3px solid var(--purple);
+  background:var(--bg4);
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 24px var(--purple-glow);
+  position:relative;
+}
+.modal-avatar-ring img{
+  width:80px;height:80px;
+  image-rendering:pixelated;
+  object-fit:contain;
+  display:block;
+}
+
+/* Text section */
+.modal-text-section{
+  padding:0 24px 20px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+}
+.modal-ign{
+  font-weight:900;font-style:italic;font-size:1.65rem;
+  text-transform:uppercase;letter-spacing:.5px;
+  color:#fff;word-break:break-word;line-height:1.1;
+  margin-bottom:10px;
+}
+.modal-title-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 14px;border-radius:99px;
+  background:rgba(139,92,246,.18);border:1px solid rgba(139,92,246,.35);
+  margin-bottom:6px;
+}
+.modal-title-pill-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--purple);
+  box-shadow:0 0 6px var(--purple-glow);
+  flex-shrink:0;
+}
+.modal-title-text{font-size:.72rem;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.modal-region-text{
+  font-size:.72rem;font-weight:700;letter-spacing:1px;
+  color:var(--text2);text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+/* NameMC button */
+.modal-namemc-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:8px;
+  background:var(--bg4);border:1px solid var(--border2);
+  font-size:.68rem;font-weight:700;color:var(--text2);
+  transition:all .13s;cursor:pointer;
+  letter-spacing:.06em;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;
+  text-decoration:none;
+  margin-bottom:20px;
+}
+.modal-namemc-btn:hover{border-color:var(--purple);color:var(--purple2)}
+.modal-namemc-icon{
+  width:18px;height:18px;border-radius:3px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* Position section */
+.modal-position-section{
+  margin:0 16px 16px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:12px 16px;
+}
+.modal-position-label{
+  font-size:.58rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text2);
+  font-family:'Orbitron',sans-serif;margin-bottom:8px;
+}
+.modal-position-row{
+  display:flex;align-items:center;gap:10px;
+}
+.modal-rank-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.6rem;font-weight:900;
+  color:#fff;line-height:1;
+  min-width:50px;
+}
+.modal-rank-num.rank-1{color:var(--rank1)}
+.modal-rank-num.rank-2{color:var(--rank2)}
+.modal-rank-num.rank-3{color:var(--rank3)}
+.modal-position-overall{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);
+  border-radius:7px;padding:6px 12px;flex:1;
+}
+.modal-trophy{font-size:1rem;line-height:1;flex-shrink:0}
+.modal-overall-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:.68rem;font-weight:900;letter-spacing:.1em;
+  color:var(--purple2);text-transform:uppercase;
+}
+.modal-pts-text{
+  font-size:.62rem;font-weight:700;color:var(--text2);
+  margin-left:auto;white-space:nowrap;
+}
+
+/* Tiers section */
+.modal-tiers-section{
+  margin:0 16px 16px;
+}
+.modal-tiers-label{
+  font-size:.58rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text2);
+  font-family:'Orbitron',sans-serif;margin-bottom:10px;
+}
+.modal-tiers-row{
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.modal-tier-chip{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-width:38px;
+}
+/* FIX 3: Modal tier icon — purple instead of red */
+.modal-tier-icon-wrap{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--bg4);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;font-weight:900;color:var(--text3);
+  transition:border-color .2s;
+  overflow:hidden;
+  position:relative;
+}
+.modal-tier-icon-wrap.has-tier{
+  border-color:rgba(139,92,246,.5)!important;
+  background:rgba(139,92,246,.12)!important;
+}
+.modal-tier-icon-wrap img{
+  width:20px;height:20px;image-rendering:pixelated;object-fit:contain;
+}
+.modal-tier-val{
+  font-size:.6rem;font-weight:900;letter-spacing:.5px;
+  text-transform:uppercase;
+}
+/* FIX 3: force purple on tier value text */
+.modal-tier-chip:not(.modal-tier-empty) .modal-tier-val{
+  color:var(--purple2)!important;
+}
+.modal-tier-empty{
+  opacity:.25;
+}
+.modal-tier-dash{
+  font-size:.7rem;color:var(--text3);font-weight:900;
+}
+
+/* ══════════════════ INFO MODAL ══════════════════ */
+.info-modal-box{
+  background:linear-gradient(160deg,var(--bg2) 0%,var(--bg3) 100%);
+  border:1px solid var(--border2);
+  border-radius:20px;width:100%;max-width:360px;
+  position:relative;overflow:hidden;
+  animation:slideUp .25s cubic-bezier(.175,.885,.32,1.275);
+  box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 40px var(--purple-glow);
+  padding:28px 24px;
+}
+.info-modal-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple2),var(--purple),var(--purple2),transparent);
+  background-size:200% 100%;animation:shimmer 3s linear infinite;
+}
+.info-modal-title{
+  font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:900;
+  letter-spacing:1px;text-transform:uppercase;color:var(--purple2);
+  text-align:center;margin-bottom:4px;
+}
+.info-modal-sub{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);text-align:center;margin-bottom:18px;font-family:'Orbitron',sans-serif}
+
+.info-tabs{display:flex;gap:6px;margin-bottom:18px}
+.itab-btn{
+  flex:1;padding:8px;text-align:center;
+  font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);cursor:pointer;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:7px;transition:all .15s;
+}
+.itab-btn.active{color:var(--purple2);border-color:var(--purple);background:var(--purple-dim)}
+
+.rank-row-info{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;margin-bottom:7px;
+  transition:border-color .2s;
+}
+.rank-row-info:hover{border-color:var(--border2)}
+.rank-name{font-weight:900;font-size:.95rem;text-transform:uppercase;letter-spacing:1px}
+.rank-pts{font-size:.62rem;font-weight:700;color:var(--text2)}
+
+/* ══════════════════ POINTS INFO PANEL ══════════════════ */
+.pts-info-desc{
+  font-size:.68rem;color:var(--text2);
+  font-family:'Orbitron',sans-serif;letter-spacing:.03em;line-height:1.6;
+  margin-bottom:16px;padding:10px 12px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;
+}
+.pts-info-desc a,.pts-info-desc span.hl{
+  color:var(--purple2);font-weight:700;
+  text-decoration:underline;text-underline-offset:2px;
+}
+.pts-scroll{max-height:340px;overflow-y:auto;padding-right:4px}
+.pts-tier-block{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px 10px;margin-bottom:8px;
+  transition:border-color .2s;
+}
+.pts-tier-block:hover{border-color:var(--border2)}
+.pts-tier-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pts-tier-trophy{font-size:.9rem;line-height:1}
+.pts-tier-label{
+  font-weight:900;font-size:.9rem;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;letter-spacing:.04em;
+}
+.pts-pills-row{display:flex;gap:7px;flex-wrap:wrap}
+.pts-pill-ht{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:7px;font-size:.78rem;font-weight:700;
+  background:rgba(167,139,250,.13);color:var(--purple2);border:1px solid rgba(167,139,250,.22);
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;
+}
+.pts-pill-lt{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:7px;font-size:.78rem;font-weight:700;
+  background:rgba(255,255,255,.05);color:var(--text2);border:1px solid var(--border);
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;
+}
+.pts-pill-ht::before{content:"▲";font-size:.6rem;opacity:.7}
+.pts-pill-lt::before{content:"▲";font-size:.6rem;opacity:.5}
+.pts-legend{
+  display:flex;gap:8px;margin-bottom:14px;
+}
+.pts-legend-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:.62rem;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;font-family:'Orbitron',sans-serif;color:var(--text2);
+}
+.pts-legend-dot{
+  width:8px;height:8px;border-radius:2px;flex-shrink:0;
+}
+
+.info-footer{display:flex;justify-content:flex-end;margin-top:16px}
+.info-close-btn{
+  padding:8px 20px;border-radius:8px;
+  background:var(--purple-dim);border:1px solid var(--border2);
+  color:var(--purple2);font-weight:700;font-size:.7rem;
+  cursor:pointer;transition:all .15s;letter-spacing:.08em;text-transform:uppercase;
+  font-family:'Orbitron',sans-serif;
+}
+.info-close-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff;transform:translateY(-1px)}
+
+/* ══════════════════ SECTION BADGE ══════════════════ */
+.section-header{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:20px;padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.section-title{
+  font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:900;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--purple2);
+}
+.section-badge{
+  padding:4px 12px;border-radius:99px;
+  background:var(--purple-dim);border:1px solid var(--border2);
+  font-size:.65rem;font-weight:900;color:var(--purple2);
+  letter-spacing:.06em;text-transform:uppercase;font-family:'Orbitron',sans-serif;
+}
+
+/* ══════════════════ RESPONSIVE ══════════════════ */
+@media(max-width:900px){
+  .card-tiers{display:none}
+  .tier-columns{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}
+}
+@media(max-width:650px){
+  .header-inner{padding:0 16px}
+  .search-wrap .search-inner{width:150px}
+  .main{padding:16px 12px 60px}
+  .mode-bar-inner{padding:0 12px}
+  .tab-section-label{display:none}
+  .tab-divider{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══ HEADER ══╗ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-text"><span class="logo-mc">PVP</span><span class="logo-tiers">TIERS</span></span>
+      <span class="logo-sub">Official Rankings</span>
+    </div>
+    <nav class="top-nav">
+      <a class="nav-link active" href="#" onclick="return false">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
+        Rankings
+      </a>
+      <a class="nav-discord" id="discord-link" href="#" target="_blank" rel="noopener">
+        <svg width="13" height="10" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.44077 45.4204 0.52529C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.52529C25.5141 0.44359 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
+        Discord
+      </a>
+    </nav>
+    <div class="header-right">
+      <div class="search-wrap">
+        <div class="search-inner">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-box" id="search-box" type="text" placeholder="Search…" autocomplete="off"/>
+        </div>
+        <div class="search-results hidden" id="search-results"></div>
+      </div>
+      <button class="info-btn" onclick="openInfoModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Info
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ╔══ MODE TABS ══╗ -->
+<div class="mode-bar-wrap">
+  <div class="mode-bar-inner" id="mode-bar-inner">
+    <div class="tab-bar-right"></div>
+  </div>
+</div>
+
+<!-- ╔══ SUB BAR ══╗ -->
+<div class="sub-bar">
+  <div class="sub-bar-inner">
+    <span class="player-count-badge" id="player-count">Loading…</span>
+  </div>
+</div>
+
+<!-- ╔══ MAIN ══╗ -->
+<main class="main" id="main-content">
+  <div class="loading" id="loading-state">
+    <div class="spinner"></div>
+    <span style="font-family:'Orbitron',sans-serif;font-size:.8rem;letter-spacing:.1em">Loading tier list…</span>
+  </div>
+</main>
+
+<!-- ╔══ PLAYER MODAL ══╗ -->
+<div class="modal-overlay hidden" id="player-modal" onclick="if(event.target.id==='player-modal') closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ╔══ INFO MODAL ══╗ -->
+<div class="modal-overlay hidden" id="info-modal" onclick="if(event.target.id==='info-modal') closeInfoModal()">
+  <div class="info-modal-box">
+    <button class="modal-close" onclick="closeInfoModal()">✕</button>
+    <div class="info-modal-title">Rankings Info</div>
+    <div class="info-modal-sub">How the system works</div>
+    <div class="info-tabs">
+      <div class="itab-btn active" id="itab-titles" onclick="switchInfoTab('titles')">Titles</div>
+      <div class="itab-btn" id="itab-points" onclick="switchInfoTab('points')">Points</div>
+    </div>
+    <div id="ipanel-titles"></div>
+    <div id="ipanel-points" class="hidden"></div>
+    <div class="info-footer"><button class="info-close-btn" onclick="closeInfoModal()">Close</button></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const TIER_POINTS = {
+  "ht1": { ht: 60, lt: 60 },
+  "lt1": { ht: 45, lt: 45 },
+  "ht2": { ht: 30, lt: 30 },
+  "lt2": { ht: 20, lt: 20 },
+  "ht3": { ht: 10, lt: 10 },
+  "lt3": { ht: 6,  lt: 6  },
+  "ht4": { ht: 4,  lt: 4  },
+  "lt4": { ht: 3,  lt: 3  },
+  "ht5": { ht: 2,  lt: 2  },
+  "lt5": { ht: 1,  lt: 1  },
+};
+
+const TIER_GROUPS = [
+  { label:"Tier 1", trophy:"", color:"#f5c842", trophyColor:"#f5c842", ht:60, lt:45 },
+  { label:"Tier 2", trophy:"", color:"#c0ccd8", trophyColor:"#c0ccd8", ht:30, lt:20 },
+  { label:"Tier 3", trophy:"", color:"#cd7f3a", trophyColor:"#cd7f3a", ht:10, lt:6  },
+  { label:"Tier 4", trophy:null, color:"#8b5cf6", trophyColor:"",        ht:4,  lt:3  },
+  { label:"Tier 5", trophy:null, color:"#6d28d9", trophyColor:"",        ht:2,  lt:1  },
+];
+
+let players=[];
+let currentMode="overall";
+
+function tierCfg(name){
+  const n=(name||"Untested").trim();
+  return CONFIG.TIERS.find(t=>t.name.toLowerCase()===n.toLowerCase())||{name:n,color:"#3a4060",points:0};
+}
+function tierPoints(name){
+  if(!name||name.trim()===""||name.trim().toLowerCase()==="untested") return 0;
+  const key=name.trim().toLowerCase();
+  if(TIER_POINTS[key]!==undefined) return TIER_POINTS[key].ht;
+  const cfg=tierCfg(name);
+  return +(cfg.points||cfg.ltPoints||0);
+}
+function playerPoints(p){
+  return CONFIG.GAME_MODES.reduce((sum,m)=>{
+    const val=(p[m.key+" New Tier"]||"").trim();
+    return sum+tierPoints(val);
+  },0);
+}
+
+const TITLES=[
+  {min:400,label:"Combat Grandmaster",cls:"title-grandmaster"},
+  {min:250,label:"Combat Master",cls:"title-master"},
+  {min:100,label:"Combat Ace",cls:"title-ace"},
+  {min:50, label:"Combat Specialist",cls:"title-specialist"},
+  {min:20, label:"Combat Cadet",cls:"title-cadet"},
+  {min:10, label:"Combat Novice",cls:"title-novice"},
+  {min:0,  label:"Rookie",cls:"title-rookie"},
+];
+function getTitle(pts){return TITLES.find(t=>pts>=t.min)||TITLES[TITLES.length-1];}
+
+function parseCSV(text){
+  const lines=text.trim().split("\n");
+  const headers=splitLine(lines[0]).map(h=>h.trim());
+  return lines.slice(1).map(line=>{
+    const vals=splitLine(line),obj={};
+    headers.forEach((h,i)=>{obj[h]=(vals[i]||"").trim();});
+    return obj;
+  }).filter(r=>r.Player||r.IGN||r.DiscordID);
+}
+function splitLine(line){
+  const res=[];let cur="",q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){q=!q;}else if(c===','&&!q){res.push(cur);cur="";}else{cur+=c;}
+  }
+  res.push(cur);return res;
+}
+
+async function init(){
+  document.title=CONFIG.SITE_NAME||"PvP Tiers";
+  const el=document.getElementById("discord-link");
+  if(el) el.href="https://discord.gg/nnhU3qCtbp";
+  buildModeTabs();
+  buildInfoPanels();
+  setupSearch();
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){closeModal();closeInfoModal();}
+    if(e.key==="/"&&document.activeElement!==document.getElementById("search-box")){
+      e.preventDefault();document.getElementById("search-box").focus();
+    }
+  });
+  try{
+    const res=await fetch(CONFIG.SHEET_CSV_URL);
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    players=parseCSV(await res.text());
+  }catch(e){
+    document.getElementById("loading-state").innerHTML=
+      `<p style="color:#f55;font-family:'Orbitron',sans-serif;font-size:.75rem;text-align:center;letter-spacing:.05em">⚠ Failed to load data.<br><small>${e.message}</small></p>`;
+    return;
+  }
+  showOverall();
+}
+
+// Keys that go into the "Other Gamemodes" dropdown
+const OTHER_MODE_KEYS = ["Diamond Spear", "Ultra Diamond SMP", "Jumpfight"];
+
+function buildModeTabs(){
+  const bar=document.getElementById("mode-bar-inner");
+  const right=bar.querySelector(".tab-bar-right");
+
+  // Overall tab
+  bar.insertBefore(makeTab("overall","🏆","Overall",null,()=>{selectMode("overall");showOverall();}),right);
+
+  // Main game mode tabs (everything NOT in the dropdown list)
+  const mainModes=CONFIG.GAME_MODES.filter(m=>!OTHER_MODE_KEYS.includes(m.key));
+  mainModes.forEach(m=>{
+    bar.insertBefore(makeTab(m.key,null,m.label,m.icon,()=>{selectMode(m.key);showTierMode(m.key);}),right);
+  });
+
+  // Dropdown modes
+  const specialModes=CONFIG.GAME_MODES.filter(m=>OTHER_MODE_KEYS.includes(m.key));
+  if(specialModes.length>0){
+    const wrap=document.createElement("div");
+    wrap.className="other-modes-wrap";
+
+    const btn=document.createElement("div");
+    btn.className="other-modes-btn";
+    btn.id="other-modes-btn";
+    btn.innerHTML=`
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+      </svg>
+      Other Gamemodes
+      <svg class="other-modes-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>`;
+
+    const dropdown=document.createElement("div");
+    dropdown.className="other-modes-dropdown";
+    dropdown.id="other-modes-dropdown";
+
+    const hdr=document.createElement("div");
+    hdr.className="other-modes-dropdown-header";
+    hdr.textContent="Select Gamemode";
+    dropdown.appendChild(hdr);
+
+    specialModes.forEach(m=>{
+      const item=document.createElement("div");
+      item.className="other-mode-item";
+      item.dataset.mode=m.key;
+      const iconHtml=m.icon?`<img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'">`:"";
+      item.innerHTML=`${iconHtml}<span class="other-mode-item-label">${m.label}</span>`;
+      item.addEventListener("click",()=>{
+        closeOtherDropdown();
+        selectMode(m.key);
+        showTierMode(m.key);
+        // Mark active item
+        dropdown.querySelectorAll(".other-mode-item").forEach(i=>i.classList.remove("active"));
+        item.classList.add("active");
+        // Mark btn as active
+        btn.classList.add("active");
+      });
+      dropdown.appendChild(item);
+    });
+
+    btn.addEventListener("click",(e)=>{
+      e.stopPropagation();
+      const isOpen=dropdown.classList.contains("open");
+      if(isOpen){ closeOtherDropdown(); }
+      else {
+        // Position relative to mode-bar-wrap
+        const wrapRect=document.querySelector(".mode-bar-wrap").getBoundingClientRect();
+        const btnRect=btn.getBoundingClientRect();
+        dropdown.style.position="absolute";
+        dropdown.style.top=(btnRect.bottom-wrapRect.top)+"px";
+        dropdown.style.right=(wrapRect.right-btnRect.right)+"px";
+        dropdown.style.left="auto";
+        dropdown.classList.add("open");
+        btn.classList.add("open");
+      }
+    });
+
+    wrap.appendChild(btn);
+    // Append dropdown to mode-bar-wrap (not inner) so overflow:auto doesn't clip it
+    bar.insertBefore(wrap,right);
+    const modeBarWrap=document.querySelector(".mode-bar-wrap");
+    if(modeBarWrap) modeBarWrap.appendChild(dropdown);
+    else wrap.appendChild(dropdown);
+  }
+}
+
+function closeOtherDropdown(){
+  const dd=document.getElementById("other-modes-dropdown");
+  const btn=document.getElementById("other-modes-btn");
+  if(dd) dd.classList.remove("open");
+  if(btn) btn.classList.remove("open");
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click",(e)=>{
+  const wrap=document.querySelector(".other-modes-wrap");
+  const dd=document.getElementById("other-modes-dropdown");
+  if(wrap&&!wrap.contains(e.target)&&dd&&!dd.contains(e.target)) closeOtherDropdown();
+});
+
+function makeTab(key,emoji,label,icon,onClick){
+  const tab=document.createElement("div");
+  tab.className="mode-tab";tab.dataset.mode=key;
+  let iconHtml="";
+  if(icon) iconHtml=`<img src="${icon}" alt="${label}" onerror="this.style.display='none'">`;
+  else if(emoji) iconHtml=`<span class="tab-emoji">${emoji}</span>`;
+  tab.innerHTML=`${iconHtml}${label}`;
+  tab.addEventListener("click",onClick);
+  return tab;
+}
+
+function selectMode(key){
+  currentMode=key;
+  document.querySelectorAll(".mode-tab").forEach(t=>t.classList.toggle("active",t.dataset.mode===key));
+  // If switching to a main tab, clear the dropdown button's active state
+  const isOther=OTHER_MODE_KEYS.includes(key);
+  const btn=document.getElementById("other-modes-btn");
+  const dd=document.getElementById("other-modes-dropdown");
+  if(!isOther){
+    if(btn) btn.classList.remove("active");
+    if(dd) dd.querySelectorAll(".other-mode-item").forEach(i=>i.classList.remove("active"));
+  }
+}
+
+function purpleName(text,rank){
+  const gradients={
+    1:'background:linear-gradient(90deg,#c4b5fd,#ede9fe,#a78bfa,#ede9fe,#c4b5fd);background-size:300% 100%;animation:nameShimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block',
+    2:'background:linear-gradient(90deg,#9578f8,#c4b5fd,#a78bfa,#c4b5fd,#9578f8);background-size:300% 100%;animation:nameShimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block',
+    3:'background:linear-gradient(90deg,#7c3aed,#a78bfa,#8b5cf6,#a78bfa,#7c3aed);background-size:300% 100%;animation:nameShimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block',
+  };
+  if(gradients[rank]) return `<span style="${gradients[rank]}">${esc(text)}</span>`;
+  return `<span style="color:#fff">${esc(text)}</span>`;
+}
+
+function showOverall(){
+  selectMode("overall");
+  const list=[...players].map(p=>({...p,_pts:playerPoints(p)})).sort((a,b)=>b._pts-a._pts);
+  document.getElementById("player-count").textContent=list.length+" players ranked";
+
+  let html="";
+  list.forEach((p,i)=>{
+    const rank=i+1;
+    const ign=(p.IGN||p.Player||"?").trim();
+    const name=(p.Player||ign).trim();
+    const reg=(p.Region||"").trim();
+    const disc=(p.DiscordID||"").trim();
+    const pts=p._pts;
+    const ti=getTitle(pts);
+
+    let rankCls="";
+    if(rank===1) rankCls="rank-1";
+    else if(rank===2) rankCls="rank-2";
+    else if(rank===3) rankCls="rank-3";
+
+    let nameSpan=purpleName(name,rank);
+
+    const skin46=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/46`;
+    const skin72=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/72`;
+
+    /* FIX 2: Overall card tier badges — purple + show mode icon */
+    const badges=CONFIG.GAME_MODES.map(m=>{
+      const t=(p[m.key+" New Tier"]||"").trim();
+      if(!t||t.toLowerCase()==="untested") return "";
+      // Icon for this game mode
+      const iconH=m.icon
+        ?`<img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'">`
+        :"";
+      return `<span class="tier-badge-sm">${iconH}${esc(t)}</span>`;
+    }).join("");
+
+    html+=`<div class="player-card" onclick="openModal('${esc(disc)}')">
+      <div class="card-rank ${rankCls}">${rank}</div>
+      <div class="head-float-wrap">
+        <img class="player-head-sm" src="${skin46}" alt="${esc(ign)}" onerror="this.style.display='none'">
+        <img class="head-float" src="${skin72}" alt="${esc(ign)}" onerror="this.style.display='none'">
+      </div>
+      <div class="card-info">
+        <div class="card-ign">${nameSpan}</div>
+        <div class="card-sub">
+          <span class="card-title ${ti.cls}">${ti.label}</span>
+          <span class="card-pts">${pts} pts</span>
+          ${reg?`<span class="region-badge">${esc(reg)}</span>`:""}
+        </div>
+      </div>
+      <div class="card-tiers">${badges}</div>
+    </div>`;
+  });
+
+  document.getElementById("main-content").innerHTML=html;
+}
+
+/* ══════════════ TIER COLUMNS VIEW ══════════════ */
+function tierNumber(name){
+  const m=String(name).match(/(\d+)$/);
+  return m?parseInt(m[1]):999;
+}
+function isHT(name){
+  return /^ht/i.test(String(name).trim());
+}
+
+function showTierMode(modeKey){
+  const mode=CONFIG.GAME_MODES.find(m=>m.key===modeKey);
+  const colKey=modeKey+" New Tier";
+  document.getElementById("player-count").textContent=players.length+" players";
+
+  const groupMap={};
+  players.forEach(p=>{
+    const raw=(p[colKey]||"").trim();
+    if(!raw||raw.toLowerCase()==="untested") return;
+    const num=tierNumber(raw);
+    if(!groupMap[num]) groupMap[num]={num,htMembers:[],ltMembers:[],htCfg:null,ltCfg:null};
+    const tc=tierCfg(raw);
+    if(isHT(raw)){
+      groupMap[num].htCfg=tc;
+      groupMap[num].htMembers.push(p);
+    } else {
+      groupMap[num].ltCfg=tc;
+      groupMap[num].ltMembers.push(p);
+    }
+  });
+
+  Object.values(groupMap).forEach(g=>{
+    g.htMembers.sort((a,b)=>(a.Player||"").localeCompare(b.Player||""));
+    g.ltMembers.sort((a,b)=>(a.Player||"").localeCompare(b.Player||""));
+  });
+
+  const sortedGroups=Object.values(groupMap).sort((a,b)=>a.num-b.num);
+  const existingNums=new Set(sortedGroups.map(g=>g.num));
+  TIER_GROUPS.forEach(tg=>{
+    const num=parseInt(tg.label.replace(/\D/g,""));
+    if(!existingNums.has(num)){
+      sortedGroups.push({num,htMembers:[],ltMembers:[],htCfg:null,ltCfg:null});
+    }
+  });
+  sortedGroups.sort((a,b)=>a.num-b.num);
+
+  const trophyEmojis={1:"",2:"",3:""};
+
+  let html=`<div class="section-header">
+    <span class="section-title">${mode?mode.label:modeKey}</span>
+    <span class="section-badge">Tier Rankings</span>
+  </div>
+  <div class="tier-columns">`;
+
+  sortedGroups.forEach((g,idx)=>{
+    const tg=TIER_GROUPS.find(x=>parseInt(x.label.replace(/\D/g,""))===g.num);
+    const color=tg?tg.color:"#7a80a8";
+    const trophy=trophyEmojis[g.num]?`<span class="tier-col-trophy">${trophyEmojis[g.num]}</span>`:"";
+    const delay=(idx*0.05).toFixed(2);
+    const allMembers=[...g.htMembers,...g.ltMembers];
+
+    html+=`<div class="tier-col" style="animation-delay:${delay}s">
+      <div class="tier-col-header" style="color:${color}">
+        ${trophy}<span class="tier-col-name">Tier ${g.num}</span>
+      </div><div class="tier-col-body">`;
+
+    if(allMembers.length===0){
+      html+=`<div class="tier-col-empty">No players</div>`;
+    } else {
+      const renderMembers=(members,label,badgeColor)=>{
+        members.forEach(p=>{
+          const ign=(p.IGN||p.Player||"?").trim();
+          const name=(p.Player||ign).trim();
+          const disc=(p.DiscordID||"").trim();
+          const skin=`https://mc-heads.net/avatar/${encodeURIComponent(ign)}/28`;
+          html+=`<div class="tier-player-row" data-disc="${esc(disc)}">
+            <img src="${skin}" alt="${esc(ign)}" width="26" height="26"
+              onerror="this.outerHTML='<div class=tier-player-fb>${name[0]?.toUpperCase()||"?"}</div>'">
+            <span class="tier-player-name">${esc(name)}</span>
+            <span class="tier-sub-badge" style="color:${badgeColor}">${label}</span>
+          </div>`;
+        });
+      };
+      if(g.htMembers.length) renderMembers(g.htMembers,"HT", color);
+      if(g.ltMembers.length){
+        if(g.htMembers.length) html+=`<div class="tier-ht-lt-divider"></div>`;
+        renderMembers(g.ltMembers,"LT","var(--text3)");
+      }
+    }
+    html+=`</div></div>`;
+  });
+  html+=`</div>`;
+
+  document.getElementById("main-content").innerHTML=html;
+  document.querySelectorAll(".tier-player-row").forEach(r=>{
+    r.addEventListener("click",()=>openModal(r.dataset.disc));
+  });
+}
+
+/* ══════════════ PLAYER MODAL ══════════════ */
+function openModal(discordId){
+  const p=players.find(x=>(x.DiscordID||"").trim()===discordId);
+  if(!p) return;
+  const ign=(p.IGN||p.Player||"?").trim();
+  const name=(p.Player||ign).trim();
+  const reg=(p.Region||"").trim();
+  const pts=playerPoints(p);
+  const ti=getTitle(pts);
+  const sorted=[...players].sort((a,b)=>playerPoints(b)-playerPoints(a));
+  const rank=sorted.findIndex(x=>(x.DiscordID||"").trim()===discordId)+1;
+
+  let rankCls="";
+  if(rank===1) rankCls="rank-1";
+  else if(rank===2) rankCls="rank-2";
+  else if(rank===3) rankCls="rank-3";
+
+  /* FIX 3: Tier chips — purple colors + show game mode icon clearly */
+  const tierChips=CONFIG.GAME_MODES.map(m=>{
+    const t=(p[m.key+" New Tier"]||"").trim();
+    const isTested=t&&t.toLowerCase()!=="untested";
+
+    // Icon for this game mode
+    const iconHtml=m.icon
+      ?`<img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'">`
+      :`<span style="font-size:.55rem;font-weight:900;color:var(--purple2);letter-spacing:.5px;text-transform:uppercase">${m.label[0]}</span>`;
+
+    if(isTested){
+      return `<div class="modal-tier-chip">
+        <div class="modal-tier-icon-wrap has-tier">
+          ${iconHtml}
+        </div>
+        <span class="modal-tier-val">${esc(t)}</span>
+      </div>`;
+    } else {
+      return `<div class="modal-tier-chip modal-tier-empty">
+        <div class="modal-tier-icon-wrap">
+          <span class="modal-tier-dash">—</span>
+        </div>
+        <span class="modal-tier-val" style="color:var(--text3)">—</span>
+      </div>`;
+    }
+  }).join("");
+
+  document.getElementById("modal-body").innerHTML=`
+    <div class="modal-avatar-wrap">
+      <div class="modal-avatar-ring">
+        <img
+          src="https://mc-heads.net/avatar/${encodeURIComponent(ign)}/80"
+          alt="${esc(name)}"
+          onerror="this.src='https://crafatar.com/avatars/${encodeURIComponent(ign)}?size=80&overlay'"
+        >
+      </div>
+    </div>
+
+    <div class="modal-text-section">
+      <div class="modal-ign">${esc(name)}</div>
+      <div class="modal-title-pill">
+        <div class="modal-title-pill-dot"></div>
+        <span class="modal-title-text ${ti.cls}">${ti.label}</span>
+      </div>
+      ${reg?`<div class="modal-region-text">${esc(regionFull(reg))}</div>`:""}
+      <a class="modal-namemc-btn" href="https://namemc.com/profile/${encodeURIComponent(ign)}" target="_blank" rel="noopener">
+        <div class="modal-namemc-icon">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        NameMC
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="modal-position-section">
+      <div class="modal-position-label">Position</div>
+      <div class="modal-position-row">
+        <div class="modal-rank-num ${rankCls}">${rank}.</div>
+        <div class="modal-position-overall">
+          <span class="modal-trophy">🏆</span>
+          <span class="modal-overall-label">Overall</span>
+          <span class="modal-pts-text">(${pts} points)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-tiers-section">
+      <div class="modal-tiers-label">Tiers</div>
+      <div class="modal-tiers-row">${tierChips}</div>
+    </div>
+  `;
+
+  document.getElementById("player-modal").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+  document.getElementById("player-modal").classList.add("hidden");
+  document.body.style.overflow="";
+}
+
+/* ══════════════ INFO MODAL ══════════════ */
+function buildInfoPanels(){
+  document.getElementById("ipanel-titles").innerHTML=TITLES.map(t=>`
+    <div class="rank-row-info">
+      <span class="rank-name ${t.cls}">${t.label}</span>
+      <span class="rank-pts">${t.min===0?"0–9 pts":t.min+"+ pts"}</span>
+    </div>`).join("");
+
+  const legendHtml=`
+    <div class="pts-legend">
+      <div class="pts-legend-item">
+        <div class="pts-legend-dot" style="background:rgba(167,139,250,.5);border:1px solid rgba(167,139,250,.4)"></div>
+        HT = High Tier
+      </div>
+      <div class="pts-legend-item">
+        <div class="pts-legend-dot" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)"></div>
+        LT = Low Tier
+      </div>
+    </div>`;
+
+  const descHtml=`
+    <div class="pts-info-desc">
+      How <span class="hl">ranking points</span> are calculated — each tier you hold across all game modes contributes points to your total score.
+    </div>`;
+
+  const tiersHtml=TIER_GROUPS.map(g=>{
+    const trophy=g.trophy?`<span class="pts-tier-trophy">${g.trophy}</span>`:"";
+    return `<div class="pts-tier-block">
+      <div class="pts-tier-head">
+        ${trophy}
+        <span class="pts-tier-label" style="color:${g.color}">${g.label}</span>
+      </div>
+      <div class="pts-pills-row">
+        <span class="pts-pill-ht">${g.ht} Points</span>
+        <span class="pts-pill-lt">${g.lt} Points</span>
+      </div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("ipanel-points").innerHTML=
+    descHtml+legendHtml+`<div class="pts-scroll">${tiersHtml}</div>`;
+}
+
+function openInfoModal(){
+  document.getElementById("info-modal").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+  switchInfoTab("titles");
+}
+function closeInfoModal(){
+  document.getElementById("info-modal").classList.add("hidden");
+  document.body.style.overflow="";
+}
+function switchInfoTab(tab){
+  document.getElementById("itab-titles").classList.toggle("active",tab==="titles");
+  document.getElementById("itab-points").classList.toggle("active",tab==="points");
+  document.getElementById("ipanel-titles").classList.toggle("hidden",tab!=="titles");
+  document.getElementById("ipanel-points").classList.toggle("hidden",tab!=="points");
+}
+
+/* ══════════════ SEARCH ══════════════ */
+function setupSearch(){
+  const inp=document.getElementById("search-box");
+  const res=document.getElementById("search-results");
+  inp.addEventListener("input",()=>{
+    const q=inp.value.trim().toLowerCase();
+    res.innerHTML="";
+    if(!q){res.classList.add("hidden");return;}
+    const hits=players.filter(p=>
+      (p.Player||"").toLowerCase().includes(q)||(p.IGN||"").toLowerCase().includes(q)
+    ).slice(0,8);
+    if(!hits.length){res.classList.add("hidden");return;}
+    hits.forEach(p=>{
+      const ign=(p.IGN||p.Player||"?").trim();
+      const name=(p.Player||ign).trim();
+      const reg=(p.Region||"").trim();
+      const div=document.createElement("div");div.className="sr-item";
+      div.innerHTML=`<img src="https://mc-heads.net/avatar/${encodeURIComponent(ign)}/32" alt="${esc(ign)}"
+          onerror="this.outerHTML='<div class=sr-avatar>${name[0]?.toUpperCase()||"?"}</div>'">
+        <div><div class="sr-name">${esc(name)}</div><div class="sr-sub">${esc(ign)}</div></div>
+        <span class="sr-region">${esc(reg)}</span>`;
+      div.addEventListener("click",()=>{res.classList.add("hidden");inp.value="";openModal((p.DiscordID||"").trim());});
+      res.appendChild(div);
+    });
+    res.classList.remove("hidden");
+  });
+  document.addEventListener("click",e=>{if(!e.target.closest(".search-wrap")) res.classList.add("hidden");});
+  inp.addEventListener("keydown",e=>{if(e.key==="Escape"){res.classList.add("hidden");inp.value="";}});
+}
+
+function regionFull(r){return{NA:"North America",EU:"Europe",AS:"Asia",SA:"South America",OC:"Oceania",AF:"Africa"}[r]||r;}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+document.addEventListener("DOMContentLoaded",init);
+</script>
+</body>
+</html>
